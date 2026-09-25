@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Arya Khandekar — Computer Science engineering student building useful software." />
+<title>Arya Khandekar | Computer Science Engineer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --ink:#17151f;
+  --muted:#655f70;
+  --orange:#ff6b35;
+  --pink:#e83e8c;
+  --violet:#6957e8;
+  --teal:#00a896;
+  --yellow:#f5b700;
+  --line:rgba(23,21,31,.12);
+  --ease:cubic-bezier(.22,.75,.18,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{color:var(--ink);background:#17151f;font-family:"Manrope",system-ui,sans-serif;line-height:1.55}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.app-shell{height:100dvh;position:relative;overflow:hidden}
+.screen{
+  position:absolute;inset:0;visibility:hidden;opacity:0;
+  transform:translateX(100%) scale(.985);
+  transition:transform .68s var(--ease),opacity .5s ease,visibility .68s;
+  overflow:hidden;
+}
+.screen.active{visibility:visible;opacity:1;transform:translateX(0) scale(1);z-index:5}
+.screen.exit-left{visibility:visible;opacity:0;transform:translateX(-100%) scale(.985);z-index:4}
+.screen.exit-right{visibility:visible;opacity:0;transform:translateX(100%) scale(.985);z-index:4}
+.screen-inner{
+  height:100%;overflow-y:auto;overflow-x:hidden;
+  padding:92px clamp(22px,5vw,80px) 110px;position:relative;
+}
+.container{width:min(1180px,100%);margin:0 auto}
+
+.nav{
+  position:fixed;top:0;left:0;right:0;height:72px;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(18px,4vw,54px);
+  background:rgba(255,250,244,.78);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(23,21,31,.09);
+}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.04em}
+.logo-mark{
+  width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-family:"DM Mono",monospace;font-size:.72rem
+}
+.nav-links{display:flex;gap:5px}
+.nav-link{
+  border:0;background:transparent;color:#5d5667;cursor:pointer;padding:9px 12px;
+  border-radius:999px;font-size:.78rem;font-weight:800;transition:.25s
+}
+.nav-link:hover,.nav-link.active{background:var(--ink);color:#fff}
+
+.progress{
+  position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:60;
+  display:flex;flex-direction:column;gap:9px
+}
+.progress button{
+  width:9px;height:9px;border:0;padding:0;border-radius:50%;
+  background:#c5bfcb;cursor:pointer;transition:.25s
+}
+.progress button.active{height:28px;border-radius:8px;background:var(--orange)}
+.screen-count{
+  position:fixed;left:clamp(18px,4vw,54px);bottom:22px;z-index:60;
+  font-family:"DM Mono",monospace;font-size:.68rem;letter-spacing:.08em;color:#756e7e
+}
+.controls{
+  position:fixed;right:clamp(18px,4vw,54px);bottom:18px;z-index:60;
+  display:flex;gap:8px
+}
+.control-btn{
+  border:1px solid rgba(23,21,31,.13);background:rgba(255,255,255,.82);
+  width:44px;height:38px;border-radius:12px;cursor:pointer;color:var(--ink);
+  transition:.25s;box-shadow:0 8px 20px rgba(0,0,0,.06)
+}
+.control-btn:hover{transform:translateY(-2px);background:var(--ink);color:#fff}
+.control-btn:disabled{cursor:not-allowed}
+
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;font-family:"DM Mono",monospace;
+  font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;font-weight:500;margin-bottom:18px
+}
+.kicker::before{content:"";width:24px;height:2px;background:currentColor}
+h1,h2,h3,p{margin-top:0}
+h1{
+  font-family:"Playfair Display",serif;font-size:clamp(4rem,10vw,9rem);
+  line-height:.88;letter-spacing:-.065em;margin-bottom:26px
+}
+h2{font-size:clamp(2.5rem,6vw,5.5rem);line-height:.94;letter-spacing:-.065em;font-weight:800;margin-bottom:20px}
+h3{font-size:1.15rem;letter-spacing:-.03em}
+.lead{font-size:clamp(1rem,1.7vw,1.25rem);color:var(--muted);max-width:650px}
+.small{font-size:.85rem;color:var(--muted)}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 17px;
+  border-radius:999px;border:1px solid var(--line);font-weight:800;font-size:.8rem;
+  background:#fff;transition:.25s;cursor:pointer
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.1)}
+.btn-dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn-orange{background:var(--orange);color:#fff;border-color:var(--orange)}
+
+.home{
+  background:linear-gradient(125deg,#fff8ee 0%,#ffe0cf 47%,#ffd0df 100%);
+  isolation:isolate
+}
+.home.screen-inner{display:grid;align-items:center}
+.home-content{position:relative;z-index:10;max-width:900px}
+.home-content h1{position:relative;z-index:20;color:var(--ink);text-shadow:0 2px 0 rgba(255,255,255,.35)}
+.home-name-accent{color:var(--orange)}
+.home-sub{position:relative;z-index:20;font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;max-width:560px}
+.home .btn-row{position:relative;z-index:20}
+.home-art{
+  position:absolute;right:-4vw;top:11vh;width:min(39vw,500px);aspect-ratio:1;
+  border-radius:44% 56% 62% 38%/44% 38% 62% 56%;
+  background:linear-gradient(135deg,#ff6b35,#e83e8c 55%,#6957e8);
+  filter:saturate(1.08);opacity:.45;transform:rotate(-10deg);
+  z-index:0;pointer-events:none
+}
+.home-art::after{
+  content:"";position:absolute;inset:13%;border:2px solid rgba(255,255,255,.5);
+  border-radius:47% 53% 36% 64%;transform:rotate(22deg)
+}
+.home-bottom{
+  position:absolute;left:clamp(22px,5vw,80px);right:clamp(22px,5vw,80px);
+  bottom:30px;z-index:20;display:flex;justify-content:flex-end;
+  font-family:"DM Mono",monospace;font-size:.68rem;color:#6b5260
+}
+.home-rights{text-align:right;white-space:nowrap}
+
+.about{background:linear-gradient(135deg,#edf6ff,#d8eaff 50%,#e9ddff)}
+.about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:50px;align-items:center}
+.about-copy{font-size:clamp(1rem,1.8vw,1.2rem);max-width:680px;color:#3f4050}
+.about-copy strong{color:var(--violet)}
+.fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fact{background:rgba(255,255,255,.75);border:1px solid rgba(105,87,232,.14);border-radius:22px;padding:20px;min-height:125px}
+.fact strong{display:block;font-size:1.6rem;letter-spacing:-.05em}
+.fact span{font-size:.72rem;color:var(--muted)}
+
+.skills{background:linear-gradient(135deg,#f3eaff,#e2d6ff 45%,#d9f8f2)}
+.skill-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:start}
+.skill-list{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.skill{padding:18px 20px;background:rgba(255,255,255,.76);border-radius:18px;border:1px solid rgba(105,87,232,.13);transition:.25s}
+.skill:hover{transform:translateY(-4px) rotate(-.4deg)}
+.skill-title{font-weight:800;margin-bottom:9px}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{
+  display:inline-block;padding:6px 9px;border-radius:999px;font-family:"DM Mono",monospace;
+  font-size:.66rem;background:#fff;border:1px solid rgba(23,21,31,.1)
+}
+.skill:nth-child(4n+1) .tag{background:#fff0ea}
+.skill:nth-child(4n+2) .tag{background:#eeeaff}
+.skill:nth-child(4n+3) .tag{background:#e5fbf6}
+.skill:nth-child(4n) .tag{background:#fff6d9}
+
+.projects{background:linear-gradient(135deg,#e8fff8,#c9f5e8 48%,#d6eaff)}
+.project-switcher{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0}
+.project-tab{
+  border:0;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.72);
+  cursor:pointer;font-weight:800;font-size:.76rem;color:#4d5660;transition:.25s
+}
+.project-tab:hover{transform:translateY(-2px)}
+.project-tab.active{background:var(--teal);color:#fff}
+.project-panel{display:none;animation:panelIn .45s var(--ease)}
+.project-panel.active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.project-layout{display:grid;grid-template-columns:1fr 1fr;gap:45px;align-items:start}
+.project-number{font-family:"DM Mono",monospace;font-size:.7rem;color:#16796e}
+.project-title{font-size:clamp(2rem,4vw,4rem);line-height:.95;margin:8px 0 15px;letter-spacing:-.06em}
+.project-desc{font-size:1rem;color:#47545b;max-width:590px}
+.project-info{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.info-block{background:rgba(255,255,255,.72);border-radius:18px;padding:16px}
+.info-block h4{margin:0 0 7px;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:#65706f}
+.info-block p,.info-block ul{margin:0;font-size:.82rem;color:#3e4848}
+.info-block ul{padding-left:17px}
+.project-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+
+.experience{background:linear-gradient(135deg,#fff9d8,#ffeeb0 50%,#ffd9b8)}
+.timeline{border-left:3px solid var(--yellow);padding-left:30px;max-width:850px}
+.timeline-item{position:relative;margin-bottom:30px}
+.timeline-item::before{
+  content:"";position:absolute;left:-41px;top:7px;width:14px;height:14px;
+  border-radius:50%;background:var(--yellow);border:4px solid #fff7cf
+}
+.year{font-family:"DM Mono",monospace;font-size:.7rem;color:#8d6d00}
+.role-title{font-size:clamp(1.6rem,3vw,2.5rem);margin:5px 0}
+.role-company{font-weight:800;margin-bottom:9px}
+.feature-list{margin:0;padding-left:20px;color:#4d493d;max-width:750px}
+.education-pill{display:inline-flex;gap:15px;align-items:center;margin-top:20px;padding:15px 18px;border-radius:18px;background:rgba(255,255,255,.72)}
+
+.achievements{background:linear-gradient(135deg,#fff0f7,#ffd9eb 45%,#e9dcff)}
+.achievement-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.achievement{background:rgba(255,255,255,.75);border-radius:28px;padding:28px;border:1px solid rgba(232,62,140,.15)}
+.achievement.patent{background:linear-gradient(135deg,rgba(255,255,255,.86),rgba(255,234,196,.86));border-color:rgba(245,183,0,.3)}
+.achievement h3{font-size:1.5rem;margin-bottom:9px}
+.patent-number{font-family:"DM Mono",monospace;font-size:.69rem;color:#806b21}
+.achievement-link{display:inline-block;margin-top:14px;font-weight:800;color:var(--pink)}
+
+.contact{background:linear-gradient(135deg,#19162a,#30206b 48%,#6b2f91);color:#fff}
+.contact .lead{color:#d9d4e9}
+.contact h2{max-width:850px}
+.contact-inner{height:100%;display:flex;flex-direction:column;justify-content:center}
+.contact-big{
+  font-family:"Playfair Display",serif;font-size:clamp(3rem,8vw,7.5rem);
+  line-height:.9;letter-spacing:-.06em;color:#ffd7ec;margin-bottom:24px
+}
+.contact-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.contact .btn{
+  min-width:132px;justify-content:center;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.32);
+  color:#fff;
+  box-shadow:0 10px 28px rgba(0,0,0,.14)
+}
+.contact .btn:hover{
+  background:#fff;border-color:#fff;color:#21192f;
+  transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.2)
+}
+.rights{
+  margin-top:42px;font-family:"DM Mono",monospace;font-size:.62rem;
+  letter-spacing:.06em;color:rgba(255,255,255,.58)
+}
+
+@media(max-width:900px){
+  .nav-links{display:none}
+  .screen-inner{padding:92px 24px 90px}
+  .home-art{width:55vw;right:-17vw;top:30vh;opacity:.20}
+  .about-grid,.skill-layout,.project-layout{grid-template-columns:1fr;gap:30px}
+  .achievement-grid{grid-template-columns:1fr}
+  h1{font-size:clamp(3.5rem,16vw,6.5rem)}
+  .progress{right:10px}
+}
+@media(max-width:600px){
+  .skill-list,.project-info,.fact-grid{grid-template-columns:1fr}
+  .controls{right:18px}
+  .screen-count{bottom:20px}
+  .progress{display:none}
+  .nav{height:62px}
+  .screen-inner{padding-top:80px}
+  .home-art{right:-30vw;top:25vh}
+  .rights{margin-top:30px}
+  .home-bottom{bottom:26px}
+  .home-rights{font-size:.58rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+</style>
+</head>
+
+<body>
+<nav class="nav">
+  <a class="logo" href="#" data-go="0">
+    <span class="logo-mark">&lt;/&gt;</span>
+    <span>ARYA.K</span>
+  </a>
+  <div class="nav-links">
+    <button class="nav-link active" data-go="0">Home</button>
+    <button class="nav-link" data-go="1">About</button>
+    <button class="nav-link" data-go="2">Skills</button>
+    <button class="nav-link" data-go="3">Projects</button>
+    <button class="nav-link" data-go="4">Experience</button>
+    <button class="nav-link" data-go="5">Achievements</button>
+    <button class="nav-link" data-go="6">Contact</button>
+  </div>
+</nav>
+
+<div class="progress" id="progress">
+  <button class="active" data-go="0" aria-label="Home"></button>
+  <button data-go="1" aria-label="About"></button>
+  <button data-go="2" aria-label="Skills"></button>
+  <button data-go="3" aria-label="Projects"></button>
+  <button data-go="4" aria-label="Experience"></button>
+  <button data-go="5" aria-label="Achievements"></button>
+  <button data-go="6" aria-label="Contact"></button>
+</div>
+
+<div class="screen-count" id="screenCount">
+  <span id="currentNo">01</span> / 07
+</div>
+
+<div class="controls">
+  <button class="control-btn" id="prevBtn" aria-label="Previous screen">←</button>
+  <button class="control-btn" id="nextBtn" aria-label="Next screen">→</button>
+</div>
+
+<main class="app-shell" id="app">
+
+<!-- HOME -->
+<section class="screen home active" data-screen="0">
+  <div class="screen-inner">
+    <div class="container home-content">
+      <div class="kicker">Computer Science & Engineering · SIT Nagpur</div>
+
+      <h1>
+        ARYA<br />
+        <span class="home-name-accent">KHANDEKAR</span>
+      </h1>
+
+      <p class="home-sub">
+        Computer Science Engineer in progress. Building useful things,
+        one problem at a time.
+      </p>
+
+      <div class="btn-row">
+        <button class="btn btn-dark" data-go="3">Explore my work →</button>
+
+        <a class="btn" href="https://github.com/Arya2206" target="_blank" rel="noopener noreferrer">
+          GitHub ↗
+        </a>
+
+        <a class="btn" href="https://www.linkedin.com/in/arya-khandekar-09ab183b5" target="_blank" rel="noopener noreferrer">
+          LinkedIn ↗
+        </a>
+      </div>
+    </div>
+
+    <div class="home-art" aria-hidden="true"></div>
+
+    <!-- No profile photo is used on the opening screen. -->
+
+    <div class="home-bottom">
+      <span class="home-rights">© 2026 Arya Khandekar · All rights reserved</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="screen about" data-screen="1">
+  <div class="screen-inner">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <div class="kicker">02 / About</div>
+          <h2>Engineering with clarity, curiosity, and purpose.</h2>
+
+          <p class="about-copy">
+            I’m a third-year B.Tech Computer Science and Engineering student
+            at <strong>Symbiosis Institute of Technology, Nagpur.</strong>
+          </p>
+
+          <p class="about-copy">
+            I enjoy building web applications, working with REST APIs,
+            validating digital workflows, and using graph-based analysis to
+            understand system behavior.
+          </p>
+        </div>
+
+        <div class="fact-grid">
+          <div class="fact"><strong>7.83</strong><span>Current CGPA</span></div>
+          <div class="fact"><strong>2028</strong><span>Expected graduation</span></div>
+          <div class="fact"><strong>B.Tech</strong><span>Computer Science & Engineering</span></div>
+          <div class="fact"><strong>Nagpur</strong><span>Maharashtra, India</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="screen skills" data-screen="2">
+  <div class="screen-inner">
+    <div class="container">
+      <div class="skill-layout">
+        <div>
+          <div class="kicker">03 / Skills</div>
+          <h2>Tools for building, analyzing, and shipping.</h2>
+          <p class="lead">
+            A practical foundation across programming, web, databases and core computer science.
+          </p>
+        </div>
+
+        <div class="skill-list">
+          <div class="skill">
+            <div class="skill-title">Languages</div>
+            <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">Python</span><span class="tag">Java</span></div>
+          </div>
+
+          <div class="skill">
+            <div class="skill-title">Web</div>
+            <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">REST APIs</span></div>
+          </div>
+
+          <div class="skill">
+            <div class="skill-title">Database</div>
+            <div class="tags"><span class="tag">MySQL</span><span class="tag">DBMS</span></div>
+          </div>
+
+          <div class="skill">
+            <div class="skill-title">Tools</div>
+            <div class="tags"><span class="tag">Git</span><span class="tag">VS Code</span></div>
+          </div>
+
+          <div class="skill">
+            <div class="skill-title">Core</div>
+            <div class="tags"><span class="tag">Data Structures</span><span class="tag">DSA</span></div>
+          </div>
+
+          <div class="skill">
+            <div class="skill-title">Applied</div>
+            <div class="tags"><span class="tag">Workflow Analysis</span><span class="tag">Graph Algorithms</span><span class="tag">API Integration</span><span class="tag">Geolocation</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="screen projects" data-screen="3">
+  <div class="screen-inner">
+    <div class="container">
+      <div class="kicker">04 / Projects</div>
+      <h2>Things I built.</h2>
+
+      <div class="project-switcher">
+        <button class="project-tab active" data-project="0">01 · SentinelGrid</button>
+        <button class="project-tab" data-project="1">02 · Workflow Verification</button>
+      </div>
+
+      <article class="project-panel active" data-project-panel="0">
+        <div class="project-layout">
+          <div>
+            <div class="project-number">01 / WEB PLATFORM</div>
+            <h3 class="project-title">SentinelGrid</h3>
+            <p class="project-desc">Disaster preparedness and emergency-assistance platform.</p>
+
+            <div class="project-actions">
+              <a class="btn btn-orange" href="https://sentinel-grid-q20x.onrender.com" target="_blank" rel="noopener noreferrer">Live Demo ↗</a>
+            </div>
+          </div>
+
+          <div class="project-info">
+            <div class="info-block">
+              <h4>Problem</h4>
+              <p>People affected by disasters need fast access to reliable safety guidance, nearby shelters, and emergency support.</p>
+            </div>
+
+            <div class="info-block">
+              <h4>Built with</h4>
+              <div class="tags">
+                <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+                <span class="tag">REST APIs</span><span class="tag">Geolocation API</span><span class="tag">OpenStreetMap</span>
+              </div>
+            </div>
+
+            <div class="info-block">
+              <h4>What I built</h4>
+              <ul>
+                <li>Responsive emergency-assistance platform.</li>
+                <li>Location-based shelter discovery.</li>
+                <li>Emergency calling and safety-status messaging.</li>
+              </ul>
+            </div>
+
+            <div class="info-block">
+              <h4>Result</h4>
+              <p>A deployed platform combining preparedness information, location-aware shelter discovery, and emergency communication.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-panel" data-project-panel="1">
+        <div class="project-layout">
+          <div>
+            <div class="project-number">02 / GRAPH ANALYSIS</div>
+            <h3 class="project-title">Intelligent Workflow Verification Framework</h3>
+            <p class="project-desc">MVP for analyzing enterprise workflow structures and finding logical issues.</p>
+
+            <div class="project-actions">
+              <a class="btn btn-dark" href="https://github.com/Arya2206/workflow-deadlock-detector" target="_blank" rel="noopener noreferrer">Source Code ↗</a>
+            </div>
+          </div>
+
+          <div class="project-info">
+            <div class="info-block">
+              <h4>Problem</h4>
+              <p>Enterprise workflows can contain deadlocks, circular dependencies, unreachable states, and structural errors before deployment.</p>
+            </div>
+
+            <div class="info-block">
+              <h4>Built with</h4>
+              <div class="tags">
+                <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">NetworkX</span><span class="tag">Matplotlib</span><span class="tag">JSON</span>
+              </div>
+            </div>
+
+            <div class="info-block">
+              <h4>What I built</h4>
+              <ul>
+                <li>Workflow parsing and dependency graph generation.</li>
+                <li>Rule validation and graph-based deadlock detection.</li>
+                <li>Circular-dependency and unreachable-state detection.</li>
+                <li>Structural analysis and visualization.</li>
+              </ul>
+            </div>
+
+            <div class="info-block">
+              <h4>Result</h4>
+              <p>An MVP that analyzes workflow structures, identifies logical and structural issues, visualizes dependencies, and assesses workflow quality.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="screen experience" data-screen="4">
+  <div class="screen-inner">
+    <div class="container">
+      <div class="kicker">05 / Experience & Education</div>
+      <h2>Building academic depth through applied development.</h2>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="year">SOFTWARE DEVELOPMENT INTERN</div>
+          <h3 class="role-title">Intelligent Workflow Verification Framework</h3>
+          <div class="role-company">AEIV Global</div>
+
+          <ul class="feature-list">
+            <li>Designed and developed an MVP for identifying logical deadlocks and structural anomalies.</li>
+            <li>Implemented workflow parsing, dependency graph generation, rule validation, and graph-based deadlock detection.</li>
+            <li>Developed circular-dependency and unreachable-state detection modules.</li>
+            <li>Performed functional testing and documented system architecture and technical research.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">2024 — 2028</div>
+          <h3 class="role-title">B.Tech · Computer Science & Engineering</h3>
+          <div class="role-company">Symbiosis Institute of Technology, Nagpur</div>
+
+          <div class="education-pill">
+            <strong>7.83</strong>
+            <span>Current CGPA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="screen achievements" data-screen="5">
+  <div class="screen-inner">
+    <div class="container">
+      <div class="kicker">06 / Leadership & Achievements</div>
+      <h2>Beyond the codebase.</h2>
+
+      <div class="achievement-grid">
+        <article class="achievement">
+          <div class="kicker">Leadership</div>
+          <h3>Core Member — IEEE Student Branch</h3>
+          <p class="small">Technical activities, workshops, event planning, registrations, team coordination and student-focused technical initiatives.</p>
+        </article>
+
+        <article class="achievement">
+          <div class="kicker">Campus</div>
+          <h3>Technical Team Member — College Fest</h3>
+          <p class="small">Technical event planning, participant registrations, technical setup, team coordination and event execution.</p>
+        </article>
+
+        <article class="achievement">
+          <div class="kicker">GitHub</div>
+          <h3>Open Source & Practice</h3>
+          <p class="small">GitHub profile with repositories spanning DSA, programming, algorithms, ML lab work and HackOWeek-related projects.</p>
+          <a class="achievement-link" href="https://github.com/Arya2206" target="_blank" rel="noopener noreferrer">Browse repositories ↗</a>
+        </article>
+
+        <article class="achievement patent">
+          <div class="kicker">Patent Publication</div>
+          <h3>Processor-Based Optimization of GaN HEMT Structures</h3>
+          <p class="small">“System and Method for Processor-Based Optimization of Gallium Nitride High Electron Mobility Transistor Structures.”</p>
+          <p class="patent-number">
+            Indian Patent Application No. 202521127292<br />
+            Published in The Patent Office Journal · 02 January 2026
+          </p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="screen contact" data-screen="6">
+  <div class="screen-inner">
+    <div class="container contact-inner">
+      <div class="kicker">07 / Let's Connect</div>
+
+      <div class="contact-big">
+        Let's build<br />
+        something useful.
+      </div>
+
+      <p class="lead">
+        Software development opportunities, technical collaboration, project discussions, or professional networking.
+      </p>
+
+      <div class="contact-links">
+        <a class="btn" href="mailto:arya.khandekar.batch2024@sitnagpur.siu.edu.in">Email Arya ↗</a>
+        <a class="btn" href="https://github.com/Arya2206" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a class="btn" href="https://www.linkedin.com/in/arya-khandekar-09ab183b5" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      </div>
+
+      <div class="rights">© 2026 Arya Khandekar · All rights reserved</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(() => {
+  const screens = [...document.querySelectorAll(".screen")];
+  const navItems = [...document.querySelectorAll("[data-go]")];
+  const progressItems = [...document.querySelectorAll("#progress button")];
+
+  const currentNo = document.getElementById("currentNo");
+  const screenCount = document.getElementById("screenCount");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+
+  let current = 0;
+  let locked = false;
+
+  function setActiveChrome(index) {
+    currentNo.textContent = String(index + 1).padStart(2, "0");
+
+    // The opening slide is intentionally clean: no 01 / 07 counter.
+    screenCount.style.display = index === 0 ? "none" : "block";
+
+    document.querySelectorAll(".nav-link").forEach((element, i) => {
+      element.classList.toggle("active", i === index);
+    });
+
+    progressItems.forEach((element, i) => {
+      element.classList.toggle("active", i === index);
+    });
+
+    prevBtn.style.opacity = index === 0 ? ".35" : "1";
+    prevBtn.disabled = index === 0;
+
+    nextBtn.textContent = index === screens.length - 1 ? "↺" : "→";
+    nextBtn.setAttribute(
+      "aria-label",
+      index === screens.length - 1 ? "Back to home" : "Next screen"
+    );
+  }
+
+  function goTo(index) {
+    if (locked) return;
+
+    index = Math.max(0, Math.min(index, screens.length - 1));
+    if (index === current) return;
+
+    locked = true;
+
+    const from = current;
+    const direction = index > from ? "next" : "prev";
+    const oldScreen = screens[from];
+    const newScreen = screens[index];
+
+    screens.forEach(screen => {
+      screen.classList.remove("exit-left", "exit-right");
+    });
+
+    newScreen.style.transition = "none";
+    newScreen.style.transform =
+      direction === "next"
+        ? "translateX(100%) scale(.985)"
+        : "translateX(-100%) scale(.985)";
+    newScreen.style.visibility = "visible";
+    newScreen.style.opacity = "0";
+
+    newScreen.getBoundingClientRect();
+
+    newScreen.style.transition = "";
+    newScreen.classList.add("active");
+
+    requestAnimationFrame(() => {
+      oldScreen.classList.remove("active");
+      oldScreen.classList.add(direction === "next" ? "exit-left" : "exit-right");
+
+      newScreen.style.transform = "";
+      newScreen.style.opacity = "";
+      newScreen.style.visibility = "";
+    });
+
+    current = index;
+    setActiveChrome(current);
+
+    setTimeout(() => {
+      oldScreen.classList.remove("exit-left", "exit-right");
+
+      screens.forEach((screen, screenIndex) => {
+        if (screenIndex !== current) screen.classList.remove("active");
+      });
+
+      // Reset scroll position whenever a new screen is opened.
+      const inner = screens[current].querySelector(".screen-inner");
+      if (inner) inner.scrollTop = 0;
+
+      locked = false;
+    }, 720);
+  }
+
+  navItems.forEach(element => {
+    element.addEventListener("click", event => {
+      if (element.tagName === "A") event.preventDefault();
+      goTo(Number(element.dataset.go));
+    });
+  });
+
+  prevBtn.addEventListener("click", () => goTo(current - 1));
+  nextBtn.addEventListener("click", () => {
+    goTo(current === screens.length - 1 ? 0 : current + 1);
+  });
+
+  document.addEventListener("keydown", event => {
+    if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+
+    if (event.key === "ArrowRight" || event.key === "PageDown") {
+      event.preventDefault();
+      goTo(current + 1);
+    }
+
+    if (event.key === "ArrowLeft" || event.key === "PageUp") {
+      event.preventDefault();
+      goTo(current - 1);
+    }
+
+    if (event.key === "Home") {
+      event.preventDefault();
+      goTo(0);
+    }
+
+    if (event.key === "End") {
+      event.preventDefault();
+      goTo(screens.length - 1);
+    }
+  });
+
+  // Touch/swipe navigation.
+  let touchStartX = null;
+
+  document.addEventListener("touchstart", event => {
+    touchStartX = event.changedTouches[0].clientX;
+  }, { passive: true });
+
+  document.addEventListener("touchend", event => {
+    if (touchStartX === null) return;
+
+    const distance = event.changedTouches[0].clientX - touchStartX;
+
+    if (Math.abs(distance) > 55) {
+      goTo(current + (distance < 0 ? 1 : -1));
+    }
+
+    touchStartX = null;
+  }, { passive: true });
+
+  // Project toggle buttons.
+  const tabs = [...document.querySelectorAll(".project-tab")];
+  const panels = [...document.querySelectorAll(".project-panel")];
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const projectId = tab.dataset.project;
+
+      tabs.forEach(item => {
+        item.classList.toggle("active", item.dataset.project === projectId);
+      });
+
+      panels.forEach(panel => {
+        panel.classList.toggle(
+          "active",
+          panel.dataset.projectPanel === projectId
+        );
+      });
+    });
+  });
+
+  // Scroll at the top/bottom of a screen can move to the next/previous screen.
+  document.querySelectorAll(".screen-inner").forEach(element => {
+    element.addEventListener("wheel", event => {
+      const canScroll = element.scrollHeight > element.clientHeight;
+
+      if (!canScroll) {
+        if (Math.abs(event.deltaY) > 20) {
+          goTo(current + (event.deltaY > 0 ? 1 : -1));
+        }
+        return;
+      }
+
+      const atTop = element.scrollTop <= 0;
+      const atBottom =
+        element.scrollTop + element.clientHeight >= element.scrollHeight - 2;
+
+      if (
+        (event.deltaY < 0 && atTop) ||
+        (event.deltaY > 0 && atBottom)
+      ) {
+        event.preventDefault();
+        goTo(current + (event.deltaY > 0 ? 1 : -1));
+      }
+    }, { passive: false });
+  });
+
+  setActiveChrome(0);
+})();
+</script>
+</body>
+</html>
